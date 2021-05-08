@@ -6,11 +6,21 @@
 /*   By: sungwopa <sungwopa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 20:40:32 by sungwopa          #+#    #+#             */
-/*   Updated: 2021/05/08 20:45:54 by sungwopa         ###   ########.fr       */
+/*   Updated: 2021/05/08 22:24:04 by sungwopa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+static size_t	get_word_len(char const *s, char c)
+{
+	size_t		len;
+
+	len = 0;
+	while (s[len] && s[len] != c)
+		len++;
+	return (len);
+}
 
 static size_t	get_word_num(char const *s, char c)
 {
@@ -23,24 +33,13 @@ static size_t	get_word_num(char const *s, char c)
 	{
 		if (s[i] != c)
 		{
-			while (s[i] && s[i] != c)
-			{
-				cnt++;
-			}
+			cnt++;
+			i += get_word_len(&s[i], c);
 		}
-		i++;
+		else
+			i++;
 	}
 	return (cnt);
-}
-
-static size_t	get_word_len(char const *s, char c)
-{
-	size_t		len;
-
-	len = 0;
-	while (s[len] && s[len] != c)
-		len++;
-	return (len);
 }
 
 static int		memerr_free(char **res, size_t n)
@@ -77,7 +76,7 @@ char			**ft_split(char const *s, char c)
 			if (res[r_i] == NULL && memerr_free(res, r_i))
 				return (0);
 			ft_strlcpy(res[r_i], &s[s_i], len_word + 1);
-			s_i += len_word;
+			s_i += len_word - 1;
 			r_i++;
 		}
 		s_i++;
