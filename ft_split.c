@@ -39,7 +39,7 @@ static int  memerr_free(char** res, size_t n)
     while (i < n)
     {
         free(res[i]);
-        i;
+        i++;
     }
     free(res);
     return (1);
