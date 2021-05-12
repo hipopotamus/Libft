@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sungwopa <sungwopa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 19:01:28 by sungwopa          #+#    #+#             */
-/*   Updated: 2021/05/12 17:52:12 by sungwopa         ###   ########.fr       */
+/*   Created: 2021/05/10 17:43:23 by sungwopa          #+#    #+#             */
+/*   Updated: 2021/05/10 19:00:58 by sungwopa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void*))
 {
-	size_t i;
+	t_list	*first_new_lst;
+	t_list	*new_lst;
 
-	if (s == NULL)
+	if (!lst || !f || !del)
 		return (NULL);
-	i = 0;
-	while (i < n)
+	if (!(first_new_lst = ft_lstnew(f(lst->content))))
+		return (NULL);
+	new_lst = first_new_lst;
+	while (lst->next != NULL)
 	{
-		if (((unsigned char*)s)[i] == (unsigned char)c)
+		lst = lst->next;
+		if (!(new_lst->next = ft_lstnew(f(lst->content))))
 		{
-			return ((void*)s + i);
+			ft_lstclear(&first_new_lst, del);
+			return (NULL);
 		}
-		i++;
+		new_lst = new_lst->next;
 	}
-	return (NULL);
+	return (first_new_lst);
 }
